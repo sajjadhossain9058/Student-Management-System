@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %} Update Student {% endblock title %} 
+{% block content %}
+<header>
+    <h1>Update Student</h1>
+    <p>Enter the student Id you want to update.</p>
+</header>
+<form method="POST">
+    {% csrf_token %}
+    <div>
+        <label for="sid">Student ID</label>
+        <input type="text" id="sid" name="sid">
+        <button type="submit">Find Student</button>
+    </div>
+</form>
+{% if message %}
+    <div>{{ message }}</div>
+{% endif %}
+{% endblock content %}

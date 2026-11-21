@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}All students{% endblock %}
+{% block content %}
+  <header class="page-head page-head-row">
+    <div>
+      <h1>All students</h1>
+      <p>{{ student|length }} record{{ student|length|pluralize }} in the database.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'addStudent' %}">Add student</a>
+  </header>
+
+  <div class="table-wrap">
+    <table class="records">
+      <thead>
+        <tr>
+          <th scope="col">Photo</th>
+          <th scope="col">Student ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Department</th>
+          <th scope="col">Batch</th>
+          <th scope="col"><span class="visually-hidden">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in student %}
+          <tr>
+            <td>
+              {% if s.image %}
+                <img class="avatar" src="{{ s.image.url }}" alt="Photo of {{ s.name }}">
+              {% else %}
+                <span class="avatar avatar-empty" aria-hidden="true">{{ s.name|slice:":1"|upper }}</span>
+              {% endif %}
+            </td>
+            <td class="sid">{{ s.sid }}</td>
+            <td>{{ s.name }}</td>
+            <td>{{ s.email }}</td>
+            <td>{{ s.department }}</td>
+            <td>{{ s.batch }}</td>
+            <td><a href="{% url 'editStudent' s.pk %}">Edit</a></td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="empty">
+              No students yet. <a href="{% url 'addStudent' %}">Add the first student</a>.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Find student{% endblock %}
+{% block content %}
+  <header class="page-head">
+    <h1>Find student</h1>
+    <p>Enter a student ID to see that student's record.</p>
+  </header>
+
+  <form method="post" class="panel form inline-form">
+    {% csrf_token %}
+    <div class="field">
+      <label for="sid">Student ID</label>
+      <input type="text" id="sid" name="sid" required autofocus>
+    </div>
+    <button type="submit" class="btn btn-primary">Find student</button>
+  </form>
+
+  {% if message %}
+    <div class="notice" role="status">{{ message }}</div>
+  {% endif %}
+
+  {% if student %}
+    <article class="idcard" aria-label="Record for {{ student.name }}">
+      {% if student.image %}
+        <img class="idcard-photo" src="{{ student.image.url }}" alt="Photo of {{ student.name }}">
+      {% else %}
+        <div class="idcard-photo idcard-photo-empty" aria-hidden="true">{{ student.name|slice:":1"|upper }}</div>
+      {% endif %}
+      <div class="idcard-body">
+        <p class="idcard-id">{{ student.sid }}</p>
+        <h2>{{ student.name }}</h2>
+        <dl>
+          <dt>Email</dt><dd>{{ student.email }}</dd>
+          <dt>Department</dt><dd>{{ student.department }}</dd>
+          <dt>Batch</dt><dd>{{ student.batch }}</dd>
+        </dl>
+        <a class="btn btn-secondary" href="{% url 'editStudent' student.pk %}">Edit student</a>
+      </div>
+    </article>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %} edit data {% endblock title %} 
+{% block content %}
+<header>
+    <h1>Edit {{ student.name }}</h1>
+    <p>Student IP {{ student.id }}. The ID cannot be changed.</p>
+</header>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% include "_form_fields.html" %}
+    <div>
+        <button type="submit">Save Change</button>
+        <a href="{% url 'view_All_Student' %}">Cancel</a>
+    </div>
+</form>
+{% endblock content %}

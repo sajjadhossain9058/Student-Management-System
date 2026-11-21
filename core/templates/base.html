@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Students | Students Record{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% with current=request.resolver_match.url_name %}
+    <div>
+        <nav class="sidebar" aria-label="main">
+            <a class="brand" href="{% url 'view_All_Student' %}">Students Record</a>
+            <ul>
+                <li><a href="{% url 'view_All_Student' %}" {% if current == 'view_All_Student' %} aria-current='page'{% endif %}>All Students</a></li>
+                <li><a href="{% url 'addStudent' %}" {% if current == 'addStudent' %} aria-current='page'{% endif %}>Add Student</a></li>
+                <li><a href="{% url 'searchStudent' %}" {% if current == 'searchStudent' %} aria-current='page'{% endif %}>Search Student</a></li>
+                <li><a href="{% url 'updateStudent' %}" {% if current == 'updateStudent' or current == 'editStudent' %} aria-current='page'{% endif %}>Update Student</a></li>
+                <li><a href="{% url 'deleteStudent' %}" {% if current == 'deleteStudent' %} aria-current='page'{% endif %}>Delete Student</a></li>
+                <li><button type='button' id="logoutBtn">Log Out</button></li>
+            </ul>
+        </nav>
+        <main class="content">
+            {% block content %}{% endblock content %}
+        </main>
+    </div>
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <h2>Confirm Logout</h2>
+            <p>Are you sure you want to log out?</p>
+            <div class="modal-buttons">
+                <!-- Logout Form -->
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-confirm">
+                        Logout
+                    </button>
+                </form>
+                <!-- Cancel Button -->
+                <button type="button" id="cancelBtn" class="cancel-btn">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>   
+    {% endwith %}
+    <script>
+    // Get HTML Elements
+    const logoutBtn = document.getElementById("logoutBtn");
+    const logoutModal = document.getElementById("logoutModal");
+    const cancelBtn = document.getElementById("cancelBtn");
+    // Open Modal
+    logoutBtn.addEventListener("click", function() {
+
+        logoutModal.style.display = "flex";
+
+    });
+    // Close Modal
+    cancelBtn.addEventListener("click", function() {
+
+        logoutModal.style.display = "none";
+
+    });
+
+    // Close Modal by Clicking Outside
+    logoutModal.addEventListener("click", function(event) {
+
+        if (event.target === logoutModal) {
+
+            logoutModal.style.display = "none";
+
+        }
+    });
+</script>
+</body>
+</html>
