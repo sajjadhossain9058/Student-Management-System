@@ -19,7 +19,6 @@ def register_view(request):
             login(request,user)
             messages.success(request,"Registration Successful.")
             return redirect('view_All_Student')
-        # Bug fix #1: pass the form (with errors) back so the template can render them
         return render(request,"register.html",{"form":form,"message":"Invalid Registration. Please try again"})
     else:
         form = RegisterForm()
@@ -50,7 +49,6 @@ def addStudent(request):
         if form.is_valid():
             form.save()
             return redirect('view_All_Student')
-        # Bug fix #2: pass the form (with errors) back so the template can render them
         return render(request,'addStudent.html',{'form':form,'message':'Invalid Input. Please try again'})
     else:
         form = StudentForm()
@@ -64,7 +62,6 @@ def searchStudent(request):
         student = Students.objects.filter(sid = sid).first()
         if student:
             return render(request,'searchStudent.html',{"student":student})
-        # Bug fix #3: typo "Studetn" → "Student"
         return render(request,'searchStudent.html',{"message":"No Student found"})
     return render(request,"searchStudent.html")
 
@@ -94,7 +91,6 @@ def editStudent(request,pk):
         if form.is_valid():
             form.save()
             return redirect("view_All_Student")
-        # Bug fix #4: pass the form (with errors) AND student back so the template can re-render
         return render(request,"editStudent.html",{"form":form,"student":student,"message":"Invalid Input. Try again"})
     else:
         form = StudentForm(instance = student)
@@ -108,15 +104,13 @@ def deleteStudent(request):
         student = Students.objects.filter(sid = sid).first()
         if student:
             if student.image:
-                student.image.delete(save = False) #remove the file from disk too
+                student.image.delete(save = False) 
             student.delete()
             return redirect('view_All_Student')
         return render(request,"deleteStudent.html",{"message":"No student found"})
     return render(request,"deleteStudent.html")
         
 #log out part
-# Bug fix #5: remove dead unreachable code — @require_POST already enforces POST-only,
-# so the inner `if request.method == 'POST':` check and the else branch were never reachable.
 @require_POST
 def logout_view(request):
     logout(request)
